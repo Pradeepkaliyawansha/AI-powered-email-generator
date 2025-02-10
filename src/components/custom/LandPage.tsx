@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../ui/button";
 import Image from "next/image";
+import SigninButton from "./SigninButton";
 
 export default function LandPage() {
   return (
@@ -12,7 +13,7 @@ export default function LandPage() {
         </span>
       </h2>
       <p className="text-center mt-4 font-normal">
-        template generator that harnesses the power of AI to create perfect
+        Template generator that harnesses the power of AI to create perfect
         emails for any situation. Whether you&apos;re a professional, marketer,
         or business owner, our platform helps you craft compelling emails in
         seconds.
@@ -21,7 +22,7 @@ export default function LandPage() {
         <Button variant="outline" className="dark:bg-green-200 text-black">
           Try Demo
         </Button>
-        <Button className="bg-green-700 dark:bg-green-400">Get Started</Button>
+        <SigninButton />
       </div>
       <Image
         src={"/landing.png"}
