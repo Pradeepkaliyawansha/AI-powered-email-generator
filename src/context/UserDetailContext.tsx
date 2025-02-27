@@ -1,4 +1,4 @@
-import UserDetail from "@/lib/dto";
+import { UserDetail } from "@/lib/dto";
 import { createContext } from "react";
 
 interface UserDetailContextType {
