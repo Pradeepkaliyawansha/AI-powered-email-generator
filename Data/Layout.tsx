@@ -13,24 +13,28 @@ const layoutItems: LayoutItem[] = [
     type: "column",
     numOfCol: 1,
     icon: RectangleHorizontal,
+    id: 1,
   },
   {
     label: "2 Column",
-    type: "column-2",
+    type: "column",
     numOfCol: 2,
     icon: Columns2,
+    id: 2,
   },
   {
     label: "3 Column",
-    type: "column-3",
+    type: "column",
     numOfCol: 3,
     icon: Columns3,
+    id: 3,
   },
   {
     label: "4 Column",
-    type: "column-4",
+    type: "column",
     numOfCol: 4,
     icon: Columns4,
+    id: 4,
   },
 ];
 

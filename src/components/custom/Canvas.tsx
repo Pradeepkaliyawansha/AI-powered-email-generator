@@ -5,9 +5,10 @@ import {
   useEmailTemplate,
   useScreenSize,
 } from "@/app/provider";
-import { EmailTemplateType } from "@/lib/dto";
+import { EmailTemplateType, LayoutItem } from "@/lib/dto";
 import { cn } from "@/lib/utils";
 import React, { useState, DragEvent } from "react";
+import ColumnLayout from "../LayoutElements/ColumnLayout";
 
 export default function Canvas() {
   const { screenSize } = useScreenSize();
@@ -46,6 +47,12 @@ export default function Canvas() {
     }
   };
 
+  const getLayoutComponent = (layoutItem: LayoutItem) => {
+    if (layoutItem?.type === "column") {
+      return <ColumnLayout {...layoutItem} />;
+    }
+  };
+
   return (
     <div className="mt-20 flex justify-center">
       <div
@@ -60,17 +67,18 @@ export default function Canvas() {
         aria-label="Email template canvas"
         role="region"
       >
-        {emailTemplate?.length === 0 && (
+        {emailTemplate?.content?.length > 0 ? (
+          emailTemplate.content.map((layoutItem, index) => (
+            <div key={index}>
+              {" "}
+              {getLayoutComponent(layoutItem as LayoutItem)}
+            </div>
+          ))
+        ) : (
           <div className="flex h-40 items-center justify-center rounded-md border-2 border-dashed">
-            <p
-              className="text-muted-foreground
-            "
-            >
-              Drag and drop elements here
-            </p>
+            <p className="text-muted-foreground">Drag and drop elements here</p>
           </div>
         )}
-        {/* Render email template elements here */}
       </div>
     </div>
   );

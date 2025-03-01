@@ -29,17 +29,19 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
   const [dragDropState, setDragDropState] = useState<DragDropLayoutElementType>(
     {
       dargLayout: {
+        id: 0,
         label: "",
         type: "",
         numOfCol: 0,
         icon: CircleIcon, // Use a dummy function as placeholder for the icon
       },
-      selectedElement: null,
+      elementList: [],
       layoutItems: [],
       isDragging: false,
     }
   );
   const [emailTemplate, setEmailTemplate] = useState<EmailTemplateType>({
+    id: 0,
     subject: "",
     content: [],
     style: {},

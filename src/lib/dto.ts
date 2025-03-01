@@ -18,6 +18,7 @@ export interface ElementLayoutCardProps {
 }
 
 export interface LayoutItem {
+  id: number;
   label: string;
   type: string;
   numOfCol: number;
@@ -56,16 +57,23 @@ export interface ScreenSizeContextType {
 
 export interface DragDropLayoutElementType {
   dargLayout?: LayoutItem & { id?: number };
-  selectedElement: ElementList | null;
+  dragElement?: ElementList & { id?: number };
+  elementList: ElementList[];
   layoutItems: LayoutItem[];
   isDragging: boolean;
 }
 
 export interface EmailTemplateType {
+  id: number;
   length: number;
   subject: string;
   content: (string | (LayoutItem & { id?: number }))[];
   style?: {
     [key: string]: string | number;
   };
+}
+
+export interface DragOverState {
+  index: number;
+  columnId?: string | number;
 }
