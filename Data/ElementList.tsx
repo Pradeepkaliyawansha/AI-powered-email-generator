@@ -86,8 +86,8 @@ const elementList: ElementList[] = [
     style: {
       backgroundColor: "#ffffff",
       padding: "10px",
-      height: "30%",
-      width: "30%",
+      height: "50%",
+      width: "50%",
     },
     outerStyle: {
       display: "flex",

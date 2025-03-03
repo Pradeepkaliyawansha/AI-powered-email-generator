@@ -1,4 +1,5 @@
 import { LucideIcon } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
 
 export interface UserDetail {
   email: string;
@@ -76,4 +77,18 @@ export interface EmailTemplateType {
 export interface DragOverState {
   index: number;
   columnId?: string | number;
+}
+
+export interface SelectedElementData {
+  layoutItem: LayoutItem;
+  index: number;
+}
+
+export interface SelectedElementContextType {
+  selectedElement: SelectedElementData | null;
+  setSelectedElement: Dispatch<SetStateAction<SelectedElementData | null>>;
+}
+
+export interface ExtendedLayoutItem extends LayoutItem {
+  [key: number]: ElementList;
 }

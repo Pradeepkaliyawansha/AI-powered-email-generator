@@ -6,13 +6,16 @@ import { UserDetailContext } from "@/context/UserDetailContext";
 import { ScreenSizeContext } from "@/context/ScreenSizeContext";
 import {
   DragDropLayoutElementType,
+  ElementList,
   EmailTemplateType,
+  LayoutItem,
   ScreenSizeContextType,
   UserDetail,
 } from "@/lib/dto";
 import { DragDropLayoutElement } from "@/context/DragDropElementLayaout";
 import { EmailTemplateContext } from "@/context/EmailTemlateContext";
 import { CircleIcon } from "lucide-react";
+import { SelectedElementContext } from "@/context/SelectedElement";
 
 const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
@@ -48,6 +51,10 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
     length: 0,
   });
 
+  const [selectedElement, setSelectedElement] = useState<
+    (ElementList | LayoutItem) | null
+  >(null);
+
   // Memoize context values
   const userDetailValue = useMemo(
     () => ({ userDetail, setUserDetail }),
@@ -71,6 +78,13 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
     }),
     [emailTemplate]
   );
+  const selectedElementValue = useMemo(
+    () => ({
+      selectedElement,
+      setSelectedElement,
+    }),
+    [selectedElement]
+  );
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -88,6 +102,29 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
       }
     }
   }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storageEmailTemplate = localStorage.getItem("emailTemplate");
+      if (storageEmailTemplate) {
+        try {
+          const template = JSON.parse(storageEmailTemplate);
+          if (template) {
+            setEmailTemplate(template);
+          }
+        } catch (error) {
+          console.error("Error parsing email template:", error);
+          localStorage.removeItem("emailTemplate");
+        }
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && emailTemplate.content.length > 0) {
+      localStorage.setItem("emailTemplate", JSON.stringify(emailTemplate));
+    }
+  }, [emailTemplate]); //
 
   useEffect(() => {
     // Handle screen size updates
@@ -121,7 +158,9 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
           <ScreenSizeContext.Provider value={screenSizeValue}>
             <DragDropLayoutElement.Provider value={dragDropValue}>
               <EmailTemplateContext.Provider value={emailTemplateValue}>
-                {children}
+                <SelectedElementContext.Provider value={selectedElementValue}>
+                  {children}
+                </SelectedElementContext.Provider>
               </EmailTemplateContext.Provider>
             </DragDropLayoutElement.Provider>
           </ScreenSizeContext.Provider>
@@ -159,6 +198,16 @@ export const useEmailTemplate = () => {
   if (context === undefined) {
     throw new Error(
       "useDragElementLayout must be used within a ScreenSizeProvider"
+    );
+  }
+  return context;
+};
+
+export const useSelectedElement = () => {
+  const context = useContext(SelectedElementContext);
+  if (context === undefined) {
+    throw new Error(
+      "useSelectedElement must be used within a SelectedElementProvider"
     );
   }
   return context;

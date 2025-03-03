@@ -1,24 +1,29 @@
 "use client";
-import { useDragElementLayout, useEmailTemplate } from "@/app/provider";
+import {
+  useDragElementLayout,
+  useEmailTemplate,
+  useSelectedElement,
+} from "@/app/provider";
 import {
   DragOverState,
   ElementList,
   EmailTemplateType,
+  ExtendedLayoutItem,
   LayoutItem,
 } from "@/lib/dto";
 import React, { useState } from "react";
 import ButtonComponent from "../custom/Element/ButtonComponent";
 import TextComponent from "../custom/Element/TextComponent";
 import ImageComponent from "../custom/Element/ImageComponent";
-
-interface ExtendedLayoutItem extends LayoutItem {
-  [key: number]: ElementList;
-}
+import LogoComponent from "../custom/Element/LogoComponent";
+import DividerComponent from "../custom/Element/DividerComponent";
+import SocialIconComponent from "../custom/Element/SocialIconComponent";
 
 export default function ColumnLayout(layoutItem: Readonly<LayoutItem>) {
   const { setEmailTemplate } = useEmailTemplate();
   const { dragDropState } = useDragElementLayout();
   const [dragOver, setDragOver] = useState<DragOverState | undefined>();
+  const { selectedElement, setSelectedElement } = useSelectedElement();
 
   const onDragOverHandle = (
     event: React.DragEvent<HTMLDivElement>,
@@ -61,6 +66,7 @@ export default function ColumnLayout(layoutItem: Readonly<LayoutItem>) {
         content: newContent,
       };
     });
+    setDragOver(undefined);
   };
 
   const getElementComponent = (element: ElementList | undefined) => {
@@ -72,6 +78,12 @@ export default function ColumnLayout(layoutItem: Readonly<LayoutItem>) {
       return <TextComponent {...element} />;
     } else if (element?.type == "Image") {
       return <ImageComponent {...element} />;
+    } else if (element?.type == "Logo") {
+      return <LogoComponent {...element} />;
+    } else if (element?.type == "Divider") {
+      return <DividerComponent {...element} />;
+    } else if (element?.type == "SocialIcons") {
+      return <SocialIconComponent {...element} />;
     }
     return element?.type;
   };
@@ -89,11 +101,15 @@ export default function ColumnLayout(layoutItem: Readonly<LayoutItem>) {
       >
         {Array.from({ length: layoutItem?.numOfCol || 1 }).map((_, index) => (
           <div
-            className={`text-black p-2 flex items-center justify-center
+            className={`text-black p-2 flex items-center justify-center cursor-pointer
               ${!extendedLayoutItem[index]?.type ? "bg-green-100 border border-dashed" : ""}
+              ${selectedElement?.layoutItem.id == layoutItem.id && selectedElement?.index == index ? "border-blue-600 border" : ""}
               ${index === dragOver?.index && dragOver?.columnId === layoutItem?.id ? "bg-green-500" : ""}`}
             onDragOver={(event) => onDragOverHandle(event, index)}
             onDrop={onDropHandle}
+            onClick={() =>
+              setSelectedElement({ layoutItem: layoutItem, index: index })
+            }
             key={index}
           >
             {getElementComponent((layoutItem as ExtendedLayoutItem)?.[index]) ??

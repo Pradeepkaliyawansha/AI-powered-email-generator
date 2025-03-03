@@ -57,9 +57,9 @@ export default function Canvas() {
     <div className="mt-20 flex justify-center">
       <div
         className={cn(
-          "w-full bg-white p-6",
+          "w-full bg-white p-6 dark:bg-gray-600",
           screenSize.isDesktop ? "max-w-2xl" : "max-w-md",
-          dragOver && "bg-green-300"
+          dragOver ? "bg-green-300" : ""
         )}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}

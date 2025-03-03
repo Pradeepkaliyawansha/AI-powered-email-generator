@@ -3,8 +3,8 @@ import React from "react";
 
 export default function ImageComponent(props: ElementList) {
   return (
-    <div>
-      <img src={props?.content} style={props?.style} alt="image" />
+    <div style={props.outerStyle}>
+      <img src={props?.imageUrl} style={props?.style} alt="image" />
     </div>
   );
 }
