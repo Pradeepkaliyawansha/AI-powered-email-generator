@@ -71,7 +71,6 @@ export default function ColumnLayout(layoutItem: Readonly<LayoutItem>) {
 
   const getElementComponent = (element: ElementList | undefined) => {
     if (!element) return null;
-    console.log(element);
     if (element?.type == "Button") {
       return <ButtonComponent {...element} />;
     } else if (element?.type == "Text") {
@@ -108,7 +107,11 @@ export default function ColumnLayout(layoutItem: Readonly<LayoutItem>) {
             onDragOver={(event) => onDragOverHandle(event, index)}
             onDrop={onDropHandle}
             onClick={() =>
-              setSelectedElement({ layoutItem: layoutItem, index: index })
+              setSelectedElement({
+                layoutItem: layoutItem,
+                elementList: extendedLayoutItem[index] || ({} as ElementList),
+                index: index,
+              })
             }
             key={index}
           >

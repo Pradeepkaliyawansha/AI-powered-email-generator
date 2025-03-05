@@ -93,3 +93,9 @@ export interface SelectedElementContextType {
 export interface ExtendedLayoutItem extends LayoutItem {
   [key: number]: ElementList;
 }
+
+export interface InputFieldProps extends ElementList {
+  value: string | undefined;
+  label: string;
+  onHandleInputChange: (value: string) => void;
+}

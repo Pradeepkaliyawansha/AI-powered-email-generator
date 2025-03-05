@@ -1,10 +1,5 @@
-import { ElementList } from "@/lib/dto";
+import { InputFieldProps } from "@/lib/dto";
 
-interface InputFieldProps extends ElementList {
-  value: string;
-  label: string;
-  onHandleInputChange: (value: string) => void;
-}
 export default function InputField({
   label,
   value,
