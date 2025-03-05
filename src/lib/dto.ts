@@ -81,6 +81,7 @@ export interface DragOverState {
 
 export interface SelectedElementData {
   layoutItem: LayoutItem;
+  elementList: ElementList;
   index: number;
 }
 

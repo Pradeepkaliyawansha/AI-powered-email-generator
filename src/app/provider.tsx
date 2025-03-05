@@ -6,10 +6,9 @@ import { UserDetailContext } from "@/context/UserDetailContext";
 import { ScreenSizeContext } from "@/context/ScreenSizeContext";
 import {
   DragDropLayoutElementType,
-  ElementList,
   EmailTemplateType,
-  LayoutItem,
   ScreenSizeContextType,
+  SelectedElementData,
   UserDetail,
 } from "@/lib/dto";
 import { DragDropLayoutElement } from "@/context/DragDropElementLayaout";
@@ -50,10 +49,8 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
     style: {},
     length: 0,
   });
-
-  const [selectedElement, setSelectedElement] = useState<
-    (ElementList | LayoutItem) | null
-  >(null);
+  const [selectedElement, setSelectedElement] =
+    useState<SelectedElementData | null>(null);
 
   // Memoize context values
   const userDetailValue = useMemo(
@@ -124,7 +121,7 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
     if (typeof window !== "undefined" && emailTemplate.content.length > 0) {
       localStorage.setItem("emailTemplate", JSON.stringify(emailTemplate));
     }
-  }, [emailTemplate]); //
+  }, [emailTemplate]);
 
   useEffect(() => {
     // Handle screen size updates
