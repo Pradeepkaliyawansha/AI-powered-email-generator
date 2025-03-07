@@ -59,7 +59,7 @@ const elementList: ElementList[] = [
     label: "Image",
     imageUrl: "/image.png",
     alt: "Image",
-    url: "#",
+    url: "",
     style: {
       backgroundColor: "#ffffff",
       padding: "10px",
@@ -82,7 +82,7 @@ const elementList: ElementList[] = [
     label: "Logo",
     imageUrl: "/logo.svg",
     alt: "logo",
-    url: "#",
+    url: "",
     style: {
       backgroundColor: "#ffffff",
       padding: "10px",

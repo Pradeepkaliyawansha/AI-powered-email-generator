@@ -97,12 +97,13 @@ export default function ColumnLayout(layoutItem: Readonly<LayoutItem>) {
           gridTemplateColumns: `repeat(${layoutItem?.numOfCol || 1},1fr)`,
           gap: "0px",
         }}
+        className={`${selectedElement?.layoutItem.id == layoutItem.id ? "border border-dashed border-green-500" : ""}`}
       >
         {Array.from({ length: layoutItem?.numOfCol || 1 }).map((_, index) => (
           <div
             className={`text-black p-2 flex items-center justify-center cursor-pointer
               ${!extendedLayoutItem[index]?.type ? "bg-green-100 border border-dashed" : ""}
-              ${selectedElement?.layoutItem.id == layoutItem.id && selectedElement?.index == index ? "border-blue-600 border" : ""}
+              ${selectedElement?.layoutItem.id == layoutItem.id && selectedElement?.index == index ? "border-green-600 border-4" : ""}
               ${index === dragOver?.index && dragOver?.columnId === layoutItem?.id ? "bg-green-500" : ""}`}
             onDragOver={(event) => onDragOverHandle(event, index)}
             onDrop={onDropHandle}

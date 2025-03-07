@@ -94,8 +94,40 @@ export interface ExtendedLayoutItem extends LayoutItem {
   [key: number]: ElementList;
 }
 
-export interface InputFieldProps extends ElementList {
+export interface InputFieldProps {
   value: string | undefined;
+  label: string;
+  onHandleInputChange: (value: string) => void;
+}
+
+export interface ColorPickerFieldProps {
+  value: string;
+  label: string;
+  onHandleInputChange: (value: string) => void;
+}
+
+export interface InputStyleFieldProp {
+  value: string;
+  label: string;
+  onHandleInputChange: (value: string) => void;
+}
+
+export interface ImagePreviewProps {
+  src: string;
+  alt: string;
+  width?: string | number;
+  height?: string | number;
+  onImageUrlChange?: (url: string) => void;
+}
+
+export interface TextAlignFieldProps {
+  value: string;
+  label: string;
+  onHandleInputChange: (value: string) => void;
+}
+
+export interface TextColorFieldProps {
+  value: string;
   label: string;
   onHandleInputChange: (value: string) => void;
 }

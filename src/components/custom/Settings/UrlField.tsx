@@ -1,6 +1,7 @@
 import { InputFieldProps } from "@/lib/dto";
+import React from "react";
 
-export default function InputField({
+export default function URLField({
   label,
   value,
   onHandleInputChange,
@@ -12,8 +13,11 @@ export default function InputField({
         {label}
       </label>
       <input
+        type="url"
         value={value}
         onChange={(event) => onHandleInputChange(event.target.value)}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+        placeholder="https://example.com"
         {...props}
       />
     </div>
