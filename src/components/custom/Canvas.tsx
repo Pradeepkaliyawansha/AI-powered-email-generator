@@ -5,16 +5,19 @@ import {
   useEmailTemplate,
   useScreenSize,
 } from "@/app/provider";
-import { EmailTemplateType, LayoutItem } from "@/lib/dto";
+import { CanvasProps, EmailTemplateType, LayoutItem } from "@/lib/dto";
 import { cn } from "@/lib/utils";
-import React, { useState, DragEvent } from "react";
+import React, { useState, DragEvent, useRef, useEffect } from "react";
 import ColumnLayout from "../LayoutElements/ColumnLayout";
+import ViewHtmlDialog from "./ViewHtmlDialog";
 
-export default function Canvas() {
+export default function Canvas({ viewHTMLCode, closeDialog }: CanvasProps) {
+  const htmlRef = useRef<HTMLDivElement>(null);
   const { screenSize } = useScreenSize();
   const { dragDropState } = useDragElementLayout();
   const { emailTemplate, setEmailTemplate } = useEmailTemplate();
   const [dragOver, setDragOver] = useState<boolean>(false);
+  const [htmlCode, setHtmlCode] = useState<string>("");
 
   const onDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -31,12 +34,11 @@ export default function Canvas() {
     setDragOver(false);
 
     if (dragDropState?.dargLayout) {
-      console.log(dragDropState.dargLayout);
       setEmailTemplate((prev: EmailTemplateType) => {
-        // Create a new content array ensuring type compatibility
+        // Create a new content array with proper typing
         const newContent = Array.isArray(prev.content)
-          ? [...prev.content, dragDropState.dargLayout as unknown as string]
-          : [dragDropState.dargLayout as unknown as string];
+          ? [...prev.content, dragDropState.dargLayout as unknown as LayoutItem]
+          : [dragDropState.dargLayout as unknown as LayoutItem];
 
         return {
           ...prev,
@@ -51,7 +53,21 @@ export default function Canvas() {
     if (layoutItem?.type === "column") {
       return <ColumnLayout {...layoutItem} />;
     }
+    return null;
   };
+
+  const getHTMLCode = () => {
+    if (htmlRef.current) {
+      const htmlContent = htmlRef.current.innerHTML;
+      setHtmlCode(htmlContent);
+    }
+  };
+
+  useEffect(() => {
+    if (viewHTMLCode) {
+      getHTMLCode();
+    }
+  }, [viewHTMLCode]);
 
   return (
     <div className="mt-20 flex justify-center">
@@ -66,11 +82,11 @@ export default function Canvas() {
         onDrop={onDropHandle}
         aria-label="Email template canvas"
         role="region"
+        ref={htmlRef}
       >
         {emailTemplate?.content?.length > 0 ? (
           emailTemplate.content.map((layoutItem, index) => (
             <div key={index}>
-              {" "}
               {getLayoutComponent(layoutItem as LayoutItem)}
             </div>
           ))
@@ -80,6 +96,11 @@ export default function Canvas() {
           </div>
         )}
       </div>
+      <ViewHtmlDialog
+        openDialog={viewHTMLCode}
+        htmlCode={htmlCode}
+        closeDialog={closeDialog}
+      />
     </div>
   );
 }

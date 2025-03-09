@@ -131,3 +131,18 @@ export interface TextColorFieldProps {
   label: string;
   onHandleInputChange: (value: string) => void;
 }
+
+export interface EditorHeaderProps {
+  viewHTMLCode: (view: boolean) => void;
+}
+
+export interface CanvasProps {
+  viewHTMLCode: boolean;
+  closeDialog?: () => void;
+}
+
+export interface ViewHtmlDialogProps {
+  openDialog: boolean;
+  htmlCode?: string;
+  closeDialog?: () => void;
+}

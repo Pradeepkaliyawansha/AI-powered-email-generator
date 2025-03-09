@@ -3,8 +3,9 @@ import React from "react";
 import { Button } from "../ui/button";
 import { Code, Monitor, Smartphone } from "lucide-react";
 import ThemeToggle from "../ui/ThemeSwitcher";
+import { EditorHeaderProps } from "@/lib/dto";
 
-export default function EditorHeader() {
+export default function EditorHeader({ viewHTMLCode }: EditorHeaderProps) {
   return (
     <div className="p-4 shadow-sm flex justify-between">
       <Image src="/logo.svg" alt="logo" width={200} height={150} />
@@ -22,6 +23,9 @@ export default function EditorHeader() {
         <Button
           variant="ghost"
           className="hover:text-primary hover:bg-green-200"
+          onClick={() => {
+            viewHTMLCode(true);
+          }}
         >
           <Code />
         </Button>

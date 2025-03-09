@@ -10,15 +10,16 @@ import URLField from "./Settings/UrlField";
 import ImageSizeField from "./Settings/ImageSizeField";
 import ImagePreview from "./Settings/ImagePreviewField";
 import TextAlignField from "./Settings/TextAlignField";
+import { Trash2 } from "lucide-react";
 
 export default function Setting() {
   const { selectedElement, setSelectedElement } = useSelectedElement();
   const { setEmailTemplate } = useEmailTemplate();
   const [content, setContent] = useState<string>("");
   const [backgroundColor, setBackgroundColor] = useState<string>("");
-  const [textColor, setTextColor] = useState<string>("#000000"); // Default text color
+  const [textColor, setTextColor] = useState<string>("#000000");
   const [fontSize, setFontSize] = useState<string>("");
-  const [textAlign, setTextAlign] = useState<string>("left"); // Default to left align
+  const [textAlign, setTextAlign] = useState<string>("left");
   const [imageWidth, setImageWidth] = useState<string>("");
   const [imageHeight, setImageHeight] = useState<string>("");
   const [url, setUrl] = useState<string>("");
@@ -42,7 +43,7 @@ export default function Setting() {
     if (selectedElement?.elementList?.style?.color) {
       setTextColor(String(selectedElement.elementList.style.color));
     } else {
-      setTextColor("#000000"); // Default value
+      setTextColor("#000000");
     }
 
     // Set initial font size
@@ -128,6 +129,50 @@ export default function Setting() {
     updateTemplate("alt", value);
   };
 
+  const handleDeleteElement = () => {
+    if (!selectedElement) return;
+
+    setEmailTemplate((prevTemplate: EmailTemplateType) => {
+      // Create a copy of the content array
+      const newContent = [...prevTemplate.content];
+
+      // Find the layout item index
+      const layoutIndex = newContent.findIndex(
+        (item) =>
+          typeof item !== "string" && item.id === selectedElement.layoutItem.id
+      );
+
+      if (layoutIndex !== -1) {
+        // Get the current layout item
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const currentLayout = newContent[layoutIndex] as any;
+
+        // Create a new array without the element at the selected index
+        const updatedLayout = { ...currentLayout };
+        delete updatedLayout[selectedElement.index];
+
+        // Filter out any undefined elements and maintain the object structure
+        const filteredLayout = Object.fromEntries(
+          Object.entries(updatedLayout).filter(
+            ([key]) => key !== selectedElement.index.toString()
+          )
+        );
+
+        // Update the content array
+        newContent[layoutIndex] = filteredLayout;
+      }
+
+      // Return updated template
+      return {
+        ...prevTemplate,
+        content: newContent,
+      };
+    });
+
+    // Clear the selected element as it's now deleted
+    setSelectedElement(null);
+  };
+
   const updateTemplate = (fieldName: string, value: string) => {
     if (!selectedElement) return;
 
@@ -211,6 +256,7 @@ export default function Setting() {
   return (
     <div className="p-5">
       <h2 className="font-bold text-xl">Settings</h2>
+
       {isTextElement && (
         <>
           <InputField
@@ -279,6 +325,20 @@ export default function Setting() {
           onHandleInputChange={handleUrlChange}
         />
       )}
+
+      <div>
+        {(selectedElement?.elementList?.alt ||
+          selectedElement?.elementList?.content) && (
+          <button
+            onClick={handleDeleteElement}
+            className="flex items-center px-3 py-2 bg-red-50 text-red-600 rounded-md hover:bg-red-100 transition-colors"
+            title="Delete element"
+          >
+            <Trash2 size={18} className="mr-2" />
+            Delete
+          </button>
+        )}
+      </div>
     </div>
   );
 }
