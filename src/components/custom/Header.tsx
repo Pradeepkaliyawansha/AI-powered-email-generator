@@ -18,7 +18,7 @@ export default function Header() {
         {userDetail?.email ? (
           <div className="flex items-center gap-3">
             <Link href={"/dashboard"}>
-              <Button className="bg-green-700 dark:bg-green-400">
+              <Button className="bg-green-500 hover:bg-green-600 text-black dark:bg-green-700 dark:hover:bg-green-800 dark:text-white ">
                 Dashboard
               </Button>
             </Link>

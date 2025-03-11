@@ -146,3 +146,8 @@ export interface ViewHtmlDialogProps {
   htmlCode?: string;
   closeDialog?: () => void;
 }
+
+export interface EmailTemplateItem {
+  description: string;
+  tId: string;
+}

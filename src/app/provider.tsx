@@ -16,7 +16,11 @@ import { EmailTemplateContext } from "@/context/EmailTemlateContext";
 import { CircleIcon } from "lucide-react";
 import { SelectedElementContext } from "@/context/SelectedElement";
 
-const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+if (!convexUrl) {
+  console.error("Missing NEXT_PUBLIC_CONVEX_URL");
+}
+const convex = new ConvexReactClient(convexUrl as string);
 const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!;
 
 export function ConvexClientProvider({ children }: { children: ReactNode }) {
@@ -105,8 +109,8 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
       const storageEmailTemplate = localStorage.getItem("emailTemplate");
       if (storageEmailTemplate) {
         try {
-          const template = JSON.parse(storageEmailTemplate);
-          if (template) {
+          const template = JSON.parse(storageEmailTemplate ?? {});
+          if (template && template.content) {
             setEmailTemplate(template);
           }
         } catch (error) {
@@ -118,7 +122,12 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && emailTemplate.content.length > 0) {
+    if (
+      typeof window !== "undefined" &&
+      emailTemplate &&
+      emailTemplate.content &&
+      emailTemplate?.content?.length > 0
+    ) {
       localStorage.setItem("emailTemplate", JSON.stringify(emailTemplate));
     }
   }, [emailTemplate]);
