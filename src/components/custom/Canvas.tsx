@@ -84,7 +84,7 @@ export default function Canvas({ viewHTMLCode, closeDialog }: CanvasProps) {
         role="region"
         ref={htmlRef}
       >
-        {emailTemplate?.content?.length > 0 ? (
+        {emailTemplate?.content && emailTemplate?.content?.length > 0 ? (
           emailTemplate.content.map((layoutItem, index) => (
             <div key={index}>
               {getLayoutComponent(layoutItem as LayoutItem)}

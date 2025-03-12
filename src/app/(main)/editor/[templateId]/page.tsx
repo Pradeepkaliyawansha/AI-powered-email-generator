@@ -29,10 +29,31 @@ export default function Editor() {
       setLoading(true);
       const result = await convex.query(api.emailTemplate.GetTemplateDesign, {
         tId: templateId,
-        email: userDetail.email, // Now TypeScript knows this is a string
+        email: userDetail.email,
       });
-      console.log(result);
-      setEmailTemplate(result?.design);
+
+      if (result?.design) {
+        // If database has template data, use it
+        setEmailTemplate(result.design);
+      } else {
+        // Otherwise, check if we have valid data in local storage
+        const storageData = localStorage.getItem("emailTemplate");
+        if (storageData) {
+          try {
+            const localTemplate = JSON.parse(storageData);
+            if (
+              localTemplate &&
+              localTemplate.content &&
+              localTemplate.content.length > 0
+            ) {
+              // Use local template if it exists and has content
+              setEmailTemplate(localTemplate);
+            }
+          } catch (error) {
+            console.error("Error parsing local template:", error);
+          }
+        }
+      }
       setLoading(false);
     }
   };

@@ -16,6 +16,7 @@ export default function AiInputBox() {
   const { userDetail } = useUserDetail();
   const saveTemplate = useMutation(api.emailTemplate.SaveTemplate);
   const router = useRouter();
+
   const OnGenerate = async () => {
     const PROMPT = Prompt.EMAIL_PROMPT + "-" + userInput;
     const tId = uuidv4();
@@ -30,7 +31,7 @@ export default function AiInputBox() {
       const result = await axios.post("/api/ai-email-generate", {
         prompt: PROMPT,
       });
-      console.log(result);
+
       const resp = await saveTemplate({
         tId: tId,
         design: result.data,
