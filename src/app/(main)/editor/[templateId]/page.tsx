@@ -33,10 +33,34 @@ export default function Editor() {
       });
 
       if (result?.design) {
-        // If database has template data, use it
-        setEmailTemplate(result.design);
+        try {
+          // Parse the design data if it's a string, otherwise use as is
+          const designData =
+            typeof result.design === "string"
+              ? JSON.parse(result.design)
+              : result.design;
+
+          // Ensure we have a properly formatted email template
+          setEmailTemplate({
+            id: new Date().getTime(),
+            subject: result.description || "Email Template",
+            content: Array.isArray(designData) ? designData : [],
+            style: {},
+            length: Array.isArray(designData) ? designData.length : 0,
+          });
+        } catch (error) {
+          console.error("Error parsing template data:", error);
+          // Fallback to empty template on parse error
+          setEmailTemplate({
+            id: new Date().getTime(),
+            subject: "Email Template",
+            content: [],
+            style: {},
+            length: 0,
+          });
+        }
       } else {
-        // Otherwise, check if we have valid data in local storage
+        // Check if we have valid data in local storage
         const storageData = localStorage.getItem("emailTemplate");
         if (storageData) {
           try {
@@ -57,7 +81,6 @@ export default function Editor() {
       setLoading(false);
     }
   };
-
   return (
     <div>
       <EditorHeader viewHTMLCode={(v) => setViewHTMLCode(v)} />

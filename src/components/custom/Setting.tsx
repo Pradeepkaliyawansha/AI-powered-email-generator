@@ -255,7 +255,9 @@ export default function Setting() {
 
   return (
     <div className="p-5">
-      <h2 className="font-bold text-xl">Settings</h2>
+      <h2 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl">
+        Settings
+      </h2>
 
       {isTextElement && (
         <>

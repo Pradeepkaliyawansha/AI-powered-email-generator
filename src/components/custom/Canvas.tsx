@@ -19,6 +19,10 @@ export default function Canvas({ viewHTMLCode, closeDialog }: CanvasProps) {
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [htmlCode, setHtmlCode] = useState<string>("");
 
+  useEffect(() => {
+    console.log("Canvas received template data:", emailTemplate);
+  }, [emailTemplate]);
+
   const onDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(true);

@@ -41,7 +41,9 @@ export default function ElementSideBar() {
 
   return (
     <div className="p-5">
-      <h2 className="font-bold text-lg">Layouts</h2>
+      <h2 className="font-bold text-base sm:text-sm md:text-xl lg:text-2xl ">
+        Layouts
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {Layout.map((layoutItems, index) => (
           <div
@@ -53,7 +55,9 @@ export default function ElementSideBar() {
           </div>
         ))}
       </div>
-      <h2 className="font-bold text-lg mt-6">Elements</h2>
+      <h2 className="font-bold text-base sm:text-lg md:text-xl lg:text-2xl mt-6">
+        Elements
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {elementList.map((element, index) => (
           <div
