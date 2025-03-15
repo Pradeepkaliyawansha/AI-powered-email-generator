@@ -32,45 +32,17 @@ export default function AiInputBox() {
         prompt: PROMPT,
       });
 
-      // Format the data properly before saving
-      // Make sure it's a proper array that can be parsed by the Canvas component
-      let formattedData = result.data;
-
-      // If the data is a string (like a stringified JSON), parse it
-      if (typeof formattedData === "string") {
-        try {
-          formattedData = JSON.parse(formattedData);
-        } catch (error) {
-          console.error("Error parsing AI response:", error);
-        }
-      }
-
-      // Create a properly structured email template object
-      const emailTemplateData = {
-        id: new Date().getTime(),
-        subject: userInput || "Email Template",
-        content: Array.isArray(formattedData) ? formattedData : [],
-        style: {},
-        length: Array.isArray(formattedData) ? formattedData.length : 0,
-      };
-
-      console.log("Saving template data:", emailTemplateData);
-
       const resp = await saveTemplate({
         tId: tId,
-        design: emailTemplateData,
+        design: result.data,
         email: userDetail?.email,
         description: userInput,
       });
-
-      // Store in localStorage for backup
-      localStorage.setItem("emailTemplate", JSON.stringify(emailTemplateData));
-
-      console.log("Template saved with ID:", resp);
+      console.log(resp);
       router.push("/editor/" + tId);
       setLoading(false);
     } catch (error) {
-      console.log("Error generating email template:", error);
+      console.log(error);
       setLoading(false);
     }
   };
