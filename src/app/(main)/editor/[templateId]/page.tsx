@@ -32,8 +32,6 @@ export default function Editor() {
         email: userDetail.email,
       });
 
-      console.log("Template data from database:", result?.design);
-
       if (result?.design) {
         // If database has template data, use it
         setEmailTemplate(result.design);

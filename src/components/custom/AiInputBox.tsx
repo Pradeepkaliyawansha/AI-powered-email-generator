@@ -1,7 +1,7 @@
+"use client";
 import React, { useState } from "react";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import Prompt from "../../../Data/Prompt";
 import axios from "axios";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 import { useUserDetail } from "@/app/provider";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Prompt from "../../../Data/Prompt";
 
 export default function AiInputBox() {
   const [userInput, setUserInput] = useState("");
