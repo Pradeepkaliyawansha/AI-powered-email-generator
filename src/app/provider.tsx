@@ -86,19 +86,24 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
     }),
     [selectedElement]
   );
-
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const storageData = localStorage.getItem("userDetails");
-      if (storageData) {
+      const storageEmailTemplate = localStorage.getItem("emailTemplate");
+      if (storageEmailTemplate) {
         try {
-          const userData = JSON.parse(storageData);
-          if (userData?.email) {
-            setUserDetail(userData);
+          const template = JSON.parse(storageEmailTemplate);
+
+          // Validate the template structure
+          if (template && template.content && Array.isArray(template.content)) {
+            setEmailTemplate(template);
+            console.log("Loaded template from localStorage:", template);
+          } else {
+            console.error("Invalid template structure in localStorage");
+            localStorage.removeItem("emailTemplate");
           }
         } catch (error) {
-          console.error("Error parsing user data:", error);
-          localStorage.removeItem("userDetails");
+          console.error("Error parsing email template:", error);
+          localStorage.removeItem("emailTemplate");
         }
       }
     }
@@ -126,8 +131,10 @@ export function ConvexClientProvider({ children }: { children: ReactNode }) {
       typeof window !== "undefined" &&
       emailTemplate &&
       emailTemplate.content &&
+      Array.isArray(emailTemplate?.content) &&
       emailTemplate?.content?.length > 0
     ) {
+      console.log("Saving template to localStorage:", emailTemplate);
       localStorage.setItem("emailTemplate", JSON.stringify(emailTemplate));
     }
   }, [emailTemplate]);

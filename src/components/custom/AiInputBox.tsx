@@ -10,6 +10,7 @@ import { useUserDetail } from "@/app/provider";
 import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Prompt from "../../../Data/Prompt";
+import { toast } from "sonner";
 
 export default function AiInputBox() {
   const [userInput, setUserInput] = useState("");
@@ -25,25 +26,51 @@ export default function AiInputBox() {
 
     if (!userDetail?.email) {
       console.error("User email is undefined");
+      toast.error("User email is required");
       setLoading(false);
       return;
     }
+
     try {
+      console.log("Sending prompt to AI...");
       const result = await axios.post("/api/ai-email-generate", {
         prompt: PROMPT,
       });
 
-      const resp = await saveTemplate({
-        tId: tId,
-        design: result.data,
-        email: userDetail?.email,
-        description: userInput,
-      });
-      console.log(resp);
-      router.push("/editor/" + tId);
+      console.log("AI Response:", result.data);
+
+      // Parse the AI response - it should be JSON string
+      const aiResponse = result.data.response;
+
+      try {
+        const parsedDesign = JSON.parse(aiResponse);
+        console.log("Parsed design:", parsedDesign);
+
+        // Validate the parsed design
+        if (!Array.isArray(parsedDesign)) {
+          throw new Error("Design is not an array");
+        }
+
+        const resp = await saveTemplate({
+          tId: tId,
+          design: parsedDesign, // Pass the parsed JSON object, not the raw string
+          email: userDetail?.email,
+          description: userInput,
+        });
+
+        console.log("Template saved:", resp);
+        toast.success("Template generated successfully!");
+        router.push("/editor/" + tId);
+      } catch (parseError) {
+        console.error("Error parsing AI response:", parseError);
+        console.log("Raw AI response:", aiResponse);
+        toast.error("Failed to parse AI response");
+      }
+
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      console.error("Error generating template:", error);
+      toast.error("Failed to generate template");
       setLoading(false);
     }
   };

@@ -19,6 +19,14 @@ export default function Canvas({ viewHTMLCode, closeDialog }: CanvasProps) {
   const [dragOver, setDragOver] = useState<boolean>(false);
   const [htmlCode, setHtmlCode] = useState<string>("");
 
+  useEffect(() => {
+    // Debug: Log the email template data
+    console.log("Current email template:", emailTemplate);
+    console.log("Template content:", emailTemplate?.content);
+    console.log("Is content an array?", Array.isArray(emailTemplate?.content));
+    console.log("Content length:", emailTemplate?.content?.length);
+  }, [emailTemplate]);
+
   const onDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(true);
@@ -69,6 +77,40 @@ export default function Canvas({ viewHTMLCode, closeDialog }: CanvasProps) {
     }
   }, [viewHTMLCode]);
 
+  // Ensure content is an array before rendering
+  const renderContent = () => {
+    const content = emailTemplate?.content;
+
+    if (!content || !Array.isArray(content)) {
+      console.error("Invalid content:", content);
+      return (
+        <div className="flex h-40 items-center justify-center rounded-md border-2 border-dashed">
+          <p className="text-muted-foreground">Invalid template data</p>
+        </div>
+      );
+    }
+
+    if (content.length === 0) {
+      return (
+        <div className="flex h-40 items-center justify-center rounded-md border-2 border-dashed">
+          <p className="text-muted-foreground">Drag and drop elements here</p>
+        </div>
+      );
+    }
+
+    return content.map((layoutItem, index) => {
+      // Ensure layoutItem is a proper LayoutItem object
+      if (typeof layoutItem === "string" || !layoutItem.type) {
+        console.error("Invalid layout item:", layoutItem);
+        return null;
+      }
+
+      return (
+        <div key={index}>{getLayoutComponent(layoutItem as LayoutItem)}</div>
+      );
+    });
+  };
+
   return (
     <div className="mt-20 flex justify-center">
       <div
@@ -84,17 +126,7 @@ export default function Canvas({ viewHTMLCode, closeDialog }: CanvasProps) {
         role="region"
         ref={htmlRef}
       >
-        {emailTemplate?.content && emailTemplate?.content?.length > 0 ? (
-          emailTemplate.content.map((layoutItem, index) => (
-            <div key={index}>
-              {getLayoutComponent(layoutItem as LayoutItem)}
-            </div>
-          ))
-        ) : (
-          <div className="flex h-40 items-center justify-center rounded-md border-2 border-dashed">
-            <p className="text-muted-foreground">Drag and drop elements here</p>
-          </div>
-        )}
+        {renderContent()}
       </div>
       <ViewHtmlDialog
         openDialog={viewHTMLCode}

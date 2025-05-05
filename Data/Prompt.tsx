@@ -10,7 +10,9 @@ export default {
 - Use appropriate type when needed, Do not Exactly copy schema as it is , Make changes depends on Email template topic
 - Write Meaning full text content with Emoji icons if needed
 - For logo add image as '/logo.svg' and for image placeholder add '/image.png'
-- Give response in JSON format only (Return schema only)
+- IMPORTANT: Give response in JSON format only, without any additional text or explanations. Return only the JSON array.
+- Do not include any text before or after the JSON array.
+- The response should start with [ and end with ]
 
     `,
 };
